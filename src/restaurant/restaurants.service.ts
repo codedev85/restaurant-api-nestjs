@@ -9,6 +9,7 @@ import { DeleteRestaurantResponseDto } from "./dtos/delete-restaurant-response.d
 
 
 @Injectable()
+
 export class RestaurantService{
 
    private restaurantIds: number[] = [];
@@ -19,6 +20,19 @@ export class RestaurantService{
 
             if (!dto.city) {
                throw new HttpException('City is required', HttpStatus.NOT_FOUND);
+            }
+
+            if (!dto.address) {
+               throw new HttpException('Address is required', HttpStatus.NOT_FOUND);
+            }
+
+
+            if (!dto.latitude) {
+               throw new HttpException('Latitude is required', HttpStatus.NOT_FOUND);
+            }
+
+            if (!dto.longitude) {
+               throw new HttpException('Longitude is required', HttpStatus.NOT_FOUND);
             }
 
          const restaurant =  this.restaurantRepository.create(dto);
@@ -80,7 +94,8 @@ export class RestaurantService{
 
    
    calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-       const R = 6371; 
+       
+      const R = 6371; 
 
        const dLat = this.toRadians(lat2 - lat1);
 
@@ -98,13 +113,18 @@ export class RestaurantService{
     }
    
    private toRadians(degrees: number): number {
+
             return degrees * (Math.PI / 180);
    }
     
   
 
-   async getNearbyRestaurants(latitude: number ,longitude : number, maxDistance : number){
+   async getNearbyRestaurants(latitude: number ,longitude : number, maxDistance : number ,city :string){
 
+
+    if(!city){throw new HttpException('City is required', HttpStatus.NOT_FOUND);}
+    
+    const  decodedCity = decodeURIComponent(city);
 
     const restaurants  = await this.restaurantRepository.find(); 
 

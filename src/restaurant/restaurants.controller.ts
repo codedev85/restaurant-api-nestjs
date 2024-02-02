@@ -1,8 +1,11 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseFloatPipe, ParseIntPipe, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseFloatPipe, ParseIntPipe, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { RestaurantService} from "./restaurants.service";
 import { createRestaurantDto } from "./dtos/create-restaurant.dto";
+import { ThrottlerGuard } from "@nestjs/throttler";
 
 @Controller('restaurant')
+
+@UseGuards(ThrottlerGuard)
 
 export class RestaurantController{
 
@@ -53,13 +56,15 @@ export class RestaurantController{
     @Query('latitude', new ParseFloatPipe()) latitude: number,
     @Query('longitude', new ParseFloatPipe()) longitude: number,
     @Query('distance', new ParseIntPipe()) distance: number,
+    @Query('city') city : string
    ) {
  
 
      return this.restaurantService.getNearbyRestaurants(
        latitude,
        longitude,
-       distance,
+       Math.abs(distance),
+       city,
      );
    }
 

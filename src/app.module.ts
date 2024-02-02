@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { RestaurantModule} from './restaurant/restaurants.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [  
@@ -24,7 +25,10 @@ import { RestaurantModule} from './restaurant/restaurants.module';
       inject: [ConfigService],
     }),
     RestaurantModule,
-  
+    ThrottlerModule.forRoot([{
+      ttl: 60000,
+      limit: 10,
+    }]),
   ],
   controllers: [AppController],
   providers: [AppService],
