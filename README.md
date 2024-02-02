@@ -14,12 +14,27 @@ $ npm run start
 # watch mode
 $ npm run start:dev
 
-# production mode
-$ npm run start:prod
 ```
 
+## Test 
+
 ```bash
+
+$ npx jest  
+
+```
+
+## Api Documentation 
+
+```bash
+
+url : https://documenter.getpostman.com/view/5269633/2s9YyvBfdR
+
+```
+
 ## API URL
+
+```bash
 
 - Base Url : http://localhost:3000/v1/
 
@@ -53,6 +68,7 @@ $ npm run start:prod
 
 - /restaurant?city=New%20York&latitude=6.5941&longitude=3.3362&distance=1000
 - GET Method
+
 ```
 
 
