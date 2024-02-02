@@ -1,21 +1,21 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 
 export class createRestaurantDto{
 
-   @IsString()
-   @IsNotEmpty()
+   @IsString({ message: 'City must be a string' })
+   @IsNotEmpty({ message: 'City is required' })
    city : string;
 
-   @IsString()
-   @IsNotEmpty()
+   @IsString({ message: 'Address must be a string' })
+   @IsNotEmpty({ message: 'Address is required' })
    address : string;
 
-   @IsString()
-   @IsNotEmpty()
+   // @IsNumber({ message: 'Laitude must be an integer' })
+   @IsNotEmpty({ message: 'Latitude is required' })
    latitude : number;
 
-   @IsString()
-   @IsNotEmpty()
+   // @IsNumber({ message: 'Longitude must be an integer' })
+   @IsNotEmpty({ message: 'Longitde is required' })
    longitude : number ;
 }

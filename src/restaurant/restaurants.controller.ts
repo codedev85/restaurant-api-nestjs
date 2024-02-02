@@ -1,8 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseFloatPipe, ParseIntPipe, Post, Put, Query } from "@nestjs/common";
 import { RestaurantService} from "./restaurants.service";
 import { createRestaurantDto } from "./dtos/create-restaurant.dto";
 
-@Controller('v1/restaurant')
+@Controller('restaurant')
 
 export class RestaurantController{
 
@@ -11,16 +11,29 @@ export class RestaurantController{
 
    @Post()
    create(@Body()  dto : createRestaurantDto){
-      return this.restaurantService.create(dto)
+
+      try {
+
+          return this.restaurantService.create(dto);
+
+       } catch (error) {
+    
+         if (error instanceof HttpException && error.getStatus() === HttpStatus.BAD_REQUEST) {
+           throw new HttpException({ message: error.message }, HttpStatus.BAD_REQUEST);
+         }
+         throw new HttpException('Internal Server Errorsss', HttpStatus.INTERNAL_SERVER_ERROR);
+       }
+      
    }
 
-   @Get()
+   @Get('all')
    getAllRestaurants(){
       return this.restaurantService.getAllRestaurants();
    }
 
    @Get(':id')
    viewrestaurant(@Param('id') id : number){
+     
       return this.restaurantService.viewRestaurant(id);
    }
 
@@ -32,6 +45,22 @@ export class RestaurantController{
    @Delete(':id')
    deleteRestaurant(@Param('id') id : number){
       return this.restaurantService.delete(id);
+   }
+
+
+   @Get()
+   getNearbyRestaurants(
+    @Query('latitude', new ParseFloatPipe()) latitude: number,
+    @Query('longitude', new ParseFloatPipe()) longitude: number,
+    @Query('distance', new ParseIntPipe()) distance: number,
+   ) {
+ 
+
+     return this.restaurantService.getNearbyRestaurants(
+       latitude,
+       longitude,
+       distance,
+     );
    }
 
 }
